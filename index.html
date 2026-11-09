@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Watches — By Alfred Stengard</title>
+
+    <!-- Custom Horological Chronograph SVG Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230D0D0C'/%3E%3Ccircle cx='32' cy='32' r='25' fill='%23F4F1EA' stroke='%23FF4F00' stroke-width='3'/%3E%3Cline x1='32' y1='10' x2='32' y2='15' stroke='%230D0D0C' stroke-width='3'/%3E%3Cline x1='54' y1='32' x2='49' y2='32' stroke='%230D0D0C' stroke-width='3'/%3E%3Cline x1='32' y1='54' x2='32' y2='49' stroke='%230D0D0C' stroke-width='3'/%3E%3Cline x1='10' y1='32' x2='15' y2='32' stroke='%230D0D0C' stroke-width='3'/%3E%3Cline x1='32' y1='32' x2='22' y2='22' stroke='%230D0D0C' stroke-width='3.5' stroke-linecap='square'/%3E%3Cline x1='32' y1='32' x2='45' y2='24' stroke='%230D0D0C' stroke-width='2.5' stroke-linecap='square'/%3E%3Cline x1='32' y1='37' x2='32' y2='14' stroke='%23FF4F00' stroke-width='2'/%3E%3Ccircle cx='32' cy='14' r='3' fill='%23FF4F00'/%3E%3Ccircle cx='32' cy='32' r='3' fill='%230D0D0C'/%3E%3C/svg%3E">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+                        sans: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        paper: '#F4F1EA',
+                        paperDark: '#EAE5D9',
+                        obsidian: '#0D0D0C',
+                        obsidianPanel: '#141413',
+                        hairlineLight: '#1A1A18',
+                        hairlineDark: '#2E2E2A',
+                        intlOrange: '#FF4F00',
+                        signalYellow: '#E5A93C',
+                        chronoGreen: '#1B4332',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts: Instrument Serif, Space Grotesk, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Industrial Brutalist / Swiss Horological Editorial Styling */
+        :root {
+            --bg-main: #F4F1EA;
+            --bg-panel: #FAF8F5;
+            --text-main: #111110;
+            --text-muted: #5C5B57;
+            --border-hairline: #1A1A18;
+            --accent-orange: #FF4F00;
+        }
+        html.dark {
+            --bg-main: #0D0D0C;
+            --bg-panel: #141413;
+            --text-main: #F4F1EA;
+            --text-muted: #8E8D87;
+            --border-hairline: #2E2E2A;
+            --accent-orange: #FF4F00;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            background-image: radial-gradient(rgba(128, 128, 120, 0.14) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+
+        /* Crisp 1px architectural borders */
+        .hairline-border {
+            border-color: var(--border-hairline);
+        }
+
+        /* Split-Flap Mechanical Card Styling */
+        .flap-unit {
+            background: linear-gradient(180deg, #222220 0%, #171715 49.5%, #090908 50%, #191917 50.5%, #121210 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 3px 0 #050505;
+            position: relative;
+        }
+        .flap-unit::before,
+        .flap-unit::after {
+            content: '';
+            position: absolute;
+            top: calc(50% - 3px);
+            width: 3px;
+            height: 6px;
+            background: #050505;
+            z-index: 3;
+        }
+        .flap-unit::before { left: 0; }
+        .flap-unit::after { right: 0; }
+
+        /* Casio F-91W Vintage LCD Screen */
+        .casio-lcd {
+            background: linear-gradient(135deg, #9CA986 0%, #8E9B79 100%);
+            color: #161C12;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.35), inset 0 0 0 2px #6C775B;
+        }
+
+        /* Nixie Tube Cathode Glow */
+        .nixie-tube {
+            background: radial-gradient(ellipse at center, #261305 0%, #0D0806 75%, #050404 100%);
+            background-image: 
+                radial-gradient(ellipse at center, rgba(255, 90, 0, 0.18) 0%, transparent 70%),
+                repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 3px),
+                repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 3px);
+            box-shadow: inset 0 0 12px rgba(0,0,0,0.9), inset 0 1px 2px rgba(255,255,255,0.18);
+        }
+        .nixie-digit {
+            color: #FF6B1A;
+            text-shadow: 0 0 6px #FF4F00, 0 0 14px #FF2A00, 0 0 24px rgba(255, 79, 0, 0.6);
+        }
+
+        /* Custom technical scrollbar */
+        .tech-scroll::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .tech-scroll::-webkit-scrollbar-track {
+            background: var(--bg-main);
+        }
+        .tech-scroll::-webkit-scrollbar-thumb {
+            background: var(--accent-orange);
+        }
+
+        @keyframes pulse-fast {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.25; }
+        }
+        .blink-sep {
+            animation: pulse-fast 1s steps(2, start) infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-intlOrange selection:text-white">
+
+    <!-- EDITORIAL / INDUSTRIAL HEADER -->
+    <header class="border-b hairline-border bg-paper/95 dark:bg-obsidian/95 sticky top-0 z-30 backdrop-blur-sm">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-8 py-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            
+            <!-- Brand Title & Watchmaker Signature Plate -->
+            <div class="flex items-start sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <!-- Mechanical Emblem -->
+                    <div class="w-12 h-12 border hairline-border bg-obsidian dark:bg-paper text-paper dark:text-obsidian flex items-center justify-center shrink-0 relative">
+                        <svg class="w-7 h-7" viewBox="0 0 32 32" fill="none">
+                            <circle cx="16" cy="16" r="13" stroke="currentColor" stroke-width="1.75"/>
+                            <line x1="16" y1="3" x2="16" y2="7" stroke="currentColor" stroke-width="1.75"/>
+                            <line x1="16" y1="25" x2="16" y2="29" stroke="currentColor" stroke-width="1.75"/>
+                            <line x1="3" y1="16" x2="7" y2="16" stroke="currentColor" stroke-width="1.75"/>
+                            <line x1="25" y1="16" x2="29" y2="16" stroke="currentColor" stroke-width="1.75"/>
+                            <line x1="16" y1="16" x2="10" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
+                            <line x1="16" y1="16" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+                            <line x1="16" y1="19" x2="16" y2="6" stroke="#FF4F00" stroke-width="1.5"/>
+                            <circle cx="16" cy="6" r="2" fill="#FF4F00"/>
+                        </svg>
+                        <span class="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-intlOrange"></span>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap items-baseline gap-x-3">
+                            <h1 class="font-serif italic text-4xl sm:text-5xl tracking-tight leading-none">World Watches</h1>
+                            <span class="font-mono text-xs uppercase tracking-widest text-intlOrange font-semibold">By Alfred Stengard</span>
+                        </div>
+                        <p id="localReferenceBar" class="font-mono text-[11px] text-neutral-600 dark:text-neutral-400 mt-1">
+                            CALIBRATING LOCAL REFERENCE ZONE...
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Utility Controls (Reset & Surface Theme) -->
+            <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                <div class="font-mono text-[11px] px-3 py-2 border hairline-border bg-paperDark/40 dark:bg-obsidianPanel flex items-center gap-2">
+                    <span class="text-neutral-500">ACTIVE CALIBERS:</span>
+                    <span id="clockCountBadge" class="font-bold text-intlOrange">06</span>
+                </div>
+
+                <button id="resetDefaultsBtn" type="button"
+                    class="font-mono text-xs uppercase tracking-wider px-3.5 py-2 border hairline-border bg-paper hover:bg-neutral-900 hover:text-paper dark:bg-obsidianPanel dark:hover:bg-paper dark:hover:text-obsidian transition-colors flex items-center gap-2">
+                    <span>[ ↺ Reset Collection ]</span>
+                </button>
+
+                <button id="themeToggleBtn" type="button" aria-label="Toggle Surface Mode"
+                    class="font-mono text-xs uppercase tracking-wider px-3.5 py-2 border hairline-border bg-obsidian text-paper dark:bg-paper dark:text-obsidian hover:bg-intlOrange dark:hover:bg-intlOrange dark:hover:text-white transition-colors flex items-center gap-2">
+                    <span id="themeToggleLabel">SURFACE: OBSIDIAN</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN WORKBENCH -->
+    <main class="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-8 py-8">
+
+        <!-- INSTRUMENT CONTROL DECK: CALIBER SELECTOR + WORLD TELEMETRY SEARCH -->
+        <section aria-label="Instrument Control Deck" class="mb-10 border hairline-border bg-paper dark:bg-obsidianPanel shadow-[4px_4px_0px_#1A1A18] dark:shadow-[4px_4px_0px_#2E2E2A]">
+            <!-- Top Deck Header -->
+            <div class="border-b hairline-border px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2 bg-paperDark/50 dark:bg-black/40 font-mono text-[11px] uppercase tracking-wider">
+                <div class="flex items-center gap-2">
+                    <span class="text-intlOrange font-bold">MODULE 01</span>
+                    <span>// INSTRUMENT CONFIGURATION &amp; TIMEZONE ACQUISITION</span>
+                </div>
+                <span class="text-neutral-500">7 HOROLOGICAL CALIBERS AVAILABLE</span>
+            </div>
+
+            <div class="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                
+                <!-- STEP 1: 7 Watch Caliber Selector -->
+                <div class="lg:col-span-7">
+                    <div class="flex items-center justify-between mb-2.5">
+                        <label class="font-mono text-xs uppercase tracking-wider font-semibold flex items-center gap-2">
+                            <span class="px-1.5 py-0.5 bg-intlOrange text-white text-[10px]">01</span>
+                            <span>Select Horological Caliber (Watch Type)</span>
+                        </label>
+                        <span id="selectedCaliberLabel" class="font-mono text-[11px] text-intlOrange uppercase">CAL.01 SWISS RAILWAY</span>
+                    </div>
+
+                    <div id="designSelectorGroup" class="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-7 gap-2">
+                        <!-- Populated dynamically from the 7 watch designs -->
+                    </div>
+                </div>
+
+                <!-- STEP 2: City / Country / Coordinate Typeahead Search -->
+                <div class="lg:col-span-5 relative">
+                    <label for="citySearchInput" class="font-mono text-xs uppercase tracking-wider font-semibold flex items-center gap-2 mb-2.5">
+                        <span class="px-1.5 py-0.5 bg-intlOrange text-white text-[10px]">02</span>
+                        <span>Search World City, Country or IANA Zone</span>
+                    </label>
+
+                    <div class="relative flex items-center">
+                        <input
+                            id="citySearchInput"
+                            type="text"
+                            autocomplete="off"
+                            placeholder="TYPE CITY OR COUNTRY (E.G. GENEVA, JAPAN, NYC, LONDON)..."
+                            class="w-full pl-4 pr-20 py-3 font-mono text-xs uppercase tracking-wider bg-paperDark/40 dark:bg-obsidian border hairline-border focus:outline-none focus:border-intlOrange text-obsidian dark:text-paper placeholder-neutral-400 dark:placeholder-neutral-600"
+                        />
+                        <button id="clearSearchBtn" type="button" class="hidden absolute right-2 px-2 py-1 font-mono text-[10px] uppercase bg-intlOrange text-white">
+                            CLR
+                        </button>
+                    </div>
+
+                    <!-- Typeahead Dropdown -->
+                    <div id="autocompleteDropdown" class="hidden absolute left-0 right-0 mt-1 bg-paper dark:bg-obsidianPanel border-2 border-intlOrange shadow-2xl max-h-80 overflow-y-auto tech-scroll z-40 divide-y hairline-border">
+                        <!-- Dynamic city results -->
+                    </div>
+
+                    <!-- Quick-Add Telemetry Strip -->
+                    <div class="mt-3 flex flex-wrap items-center gap-1.5">
+                        <span class="font-mono text-[10px] uppercase tracking-wider text-neutral-500 mr-1">QUICK DEPLOY:</span>
+                        <div id="quickAddPills" class="flex flex-wrap gap-1"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WATCHES ARCHITECTURAL GRID -->
+        <section id="clocksGrid" aria-live="polite" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <!-- Watch Cards Rendered Here -->
+        </section>
+
+        <!-- EMPTY STATE -->
+        <div id="emptyState" class="hidden border hairline-border bg-paper dark:bg-obsidianPanel p-12 text-center my-8">
+            <p class="font-mono text-xs uppercase tracking-widest text-intlOrange mb-2">// ZERO INSTRUMENTS DEPLOYED</p>
+            <h2 class="font-serif italic text-4xl mb-3">Horological Bench Empty</h2>
+            <p class="font-mono text-xs text-neutral-500 max-w-md mx-auto mb-6">
+                Use the telemetry search above to deploy world watches in any of the 7 analog or digital calibers, or restore the factory exhibition collection.
+            </p>
+            <button id="emptyResetBtn" type="button" class="font-mono text-xs uppercase tracking-widest px-6 py-3 bg-intlOrange text-white hover:opacity-90 transition-opacity">
+                [ Restore Exhibition Collection ]
+            </button>
+        </div>
+
+    </main>
+
+    <!-- NOTIFICATION TELEMETRY TOAST -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- ARCHITECTURAL FOOTER -->
+    <footer class="border-t hairline-border bg-paperDark/50 dark:bg-obsidianPanel mt-16">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 font-mono text-xs">
+            <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 bg-intlOrange"></span>
+                    <span class="font-bold tracking-wider uppercase">WORLD WATCHES — HOROLOGICAL TELEMETRY</span>
+                </div>
+                <p class="text-[11px] text-neutral-500">
+                    100% STANDALONE CLIENT-SIDE ENGINE // ZERO EXTERNAL API DEPENDENCIES // IANA TIMEZONE DATABASE
+                </p>
+            </div>
+            <div class="border hairline-border px-4 py-2 bg-paper dark:bg-obsidian text-right">
+                <span class="block text-[10px] text-neutral-500 uppercase tracking-widest">DESIGNED &amp; ENGINEERED</span>
+                <span class="font-bold tracking-widest text-intlOrange uppercase">BY ALFRED STENGARD</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- HOROLOGICAL APPLICATION ENGINE -->
+    <script>
+        (function () {
+            'use strict';
+
+            // ============================================================================
+            // 1. 7 HOROLOGICAL WATCH DESIGNS (3 ANALOG, 4 DIGITAL)
+            // ============================================================================
+            const DESIGNS = [
+                { id: 'swiss-railway', code: 'CAL.01', short: 'Swiss Rail', name: 'Swiss Railway (Mondaine)', type: 'ANALOG' },
+                { id: 'chrono-diver',  code: 'CAL.02', short: 'Chrono Diver', name: 'Chronograph Divers', type: 'ANALOG' },
+                { id: 'bauhaus-bill',  code: 'CAL.03', short: 'Bauhaus', name: 'Bauhaus Max Bill', type: 'ANALOG' },
+                { id: 'split-flap',    code: 'CAL.04', short: 'Flip Clock', name: 'Split-Flap Mechanical', type: 'DIGITAL' },
+                { id: 'casio-lcd',     code: 'CAL.05', short: 'Casio F-91W', name: 'Casio Vintage Quartz LCD', type: 'DIGITAL' },
+                { id: 'nixie-tube',    code: 'CAL.06', short: 'Nixie Tube', name: 'Cathode Glow Nixie', type: 'DIGITAL' },
+                { id: 'binary-matrix', code: 'CAL.07', short: 'BCD Matrix', name: 'Binary Horological Matrix', type: 'DIGITAL' }
+            ];
+
+            // ============================================================================
+            // 2. WORLD CITIES DATABASE (80+ CITIES WITH COORDINATES & IANA TIMEZONES)
+            // ============================================================================
+            const WORLD_CITIES = [
+                // Europe
+                { city: 'Geneva', country: 'Switzerland', tz: 'Europe/Zurich', coords: '46.20°N, 06.14°E', keywords: 'swiss horology rolex patek' },
+                { city: 'Zurich', country: 'Switzerland', tz: 'Europe/Zurich', coords: '47.37°N, 08.54°E', keywords: 'swiss' },
+                { city: 'London', country: 'United Kingdom', tz: 'Europe/London', coords: '51.51°N, 00.13°W', keywords: 'uk england britain gmt greenwich' },
+                { city: 'Stockholm', country: 'Sweden', tz: 'Europe/Stockholm', coords: '59.33°N, 18.07°E', keywords: 'scandinavia nordic' },
+                { city: 'Umeå', country: 'Sweden', tz: 'Europe/Stockholm', coords: '63.83°N, 20.26°E', keywords: 'umea sweden north' },
+                { city: 'Gothenburg', country: 'Sweden', tz: 'Europe/Stockholm', coords: '57.71°N, 11.97°E', keywords: 'goteborg sweden' },
+                { city: 'Malmö', country: 'Sweden', tz: 'Europe/Stockholm', coords: '55.61°N, 13.00°E', keywords: 'malmo sweden' },
+                { city: 'Oslo', country: 'Norway', tz: 'Europe/Oslo', coords: '59.91°N, 10.75°E', keywords: 'nordic' },
+                { city: 'Copenhagen', country: 'Denmark', tz: 'Europe/Copenhagen', coords: '55.68°N, 12.57°E', keywords: 'nordic' },
+                { city: 'Helsinki', country: 'Finland', tz: 'Europe/Helsinki', coords: '60.17°N, 24.94°E', keywords: 'nordic' },
+                { city: 'Reykjavik', country: 'Iceland', tz: 'Atlantic/Reykjavik', coords: '64.15°N, 21.94°W', keywords: 'utc' },
+                { city: 'Paris', country: 'France', tz: 'Europe/Paris', coords: '48.86°N, 02.35°E', keywords: 'cet' },
+                { city: 'Berlin', country: 'Germany', tz: 'Europe/Berlin', coords: '52.52°N, 13.40°E', keywords: 'bauhaus glashutte' },
+                { city: 'Munich', country: 'Germany', tz: 'Europe/Berlin', coords: '48.14°N, 11.58°E', keywords: 'bavaria' },
+                { city: 'Frankfurt', country: 'Germany', tz: 'Europe/Berlin', coords: '50.11°N, 08.68°E', keywords: 'sinn' },
+                { city: 'Amsterdam', country: 'Netherlands', tz: 'Europe/Amsterdam', coords: '52.37°N, 04.90°E', keywords: 'holland' },
+                { city: 'Brussels', country: 'Belgium', tz: 'Europe/Brussels', coords: '50.85°N, 04.35°E', keywords: 'eu' },
+                { city: 'Vienna', country: 'Austria', tz: 'Europe/Vienna', coords: '48.21°N, 16.37°E', keywords: 'oesterreich' },
+                { city: 'Rome', country: 'Italy', tz: 'Europe/Rome', coords: '41.90°N, 12.50°E', keywords: 'italia' },
+                { city: 'Milan', country: 'Italy', tz: 'Europe/Rome', coords: '45.46°N, 09.19°E', keywords: 'design' },
+                { city: 'Madrid', country: 'Spain', tz: 'Europe/Madrid', coords: '40.42°N, 03.70°W', keywords: 'espana' },
+                { city: 'Barcelona', country: 'Spain', tz: 'Europe/Madrid', coords: '41.39°N, 02.17°E', keywords: 'catalonia' },
+                { city: 'Lisbon', country: 'Portugal', tz: 'Europe/Lisbon', coords: '38.72°N, 09.14°W', keywords: 'portugal' },
+                { city: 'Dublin', country: 'Ireland', tz: 'Europe/Dublin', coords: '53.35°N, 06.26°W', keywords: 'eire' },
+                { city: 'Edinburgh', country: 'United Kingdom', tz: 'Europe/London', coords: '55.95°N, 03.19°W', keywords: 'scotland' },
+                { city: 'Athens', country: 'Greece', tz: 'Europe/Athens', coords: '37.98°N, 23.73°E', keywords: 'hellas' },
+                { city: 'Warsaw', country: 'Poland', tz: 'Europe/Warsaw', coords: '52.23°N, 21.01°E', keywords: 'polska' },
+                { city: 'Prague', country: 'Czechia', tz: 'Europe/Prague', coords: '50.08°N, 14.44°E', keywords: 'czech republic' },
+                { city: 'Budapest', country: 'Hungary', tz: 'Europe/Budapest', coords: '47.50°N, 19.04°E', keywords: 'magyar' },
+                { city: 'Bucharest', country: 'Romania', tz: 'Europe/Bucharest', coords: '44.43°N, 26.10°E', keywords: 'eet' },
+                { city: 'Tallinn', country: 'Estonia', tz: 'Europe/Tallinn', coords: '59.44°N, 24.75°E', keywords: 'baltic' },
+                { city: 'Riga', country: 'Latvia', tz: 'Europe/Riga', coords: '56.95°N, 24.11°E', keywords: 'baltic' },
+                { city: 'Vilnius', country: 'Lithuania', tz: 'Europe/Vilnius', coords: '54.69°N, 25.28°E', keywords: 'baltic' },
+                { city: 'Kyiv', country: 'Ukraine', tz: 'Europe/Kyiv', coords: '50.45°N, 30.52°E', keywords: 'ukraine' },
+                { city: 'Istanbul', country: 'Turkey', tz: 'Europe/Istanbul', coords: '41.01°N, 28.98°E', keywords: 'turkiye' },
+                { city: 'Moscow', country: 'Russia', tz: 'Europe/Moscow', coords: '55.76°N, 37.62°E', keywords: 'msk' },
+
+                // Americas
+                { city: 'New York', country: 'United States', tz: 'America/New_York', coords: '40.71°N, 74.01°W', keywords: 'usa nyc manhattan est' },
+                { city: 'Washington D.C.', country: 'United States', tz: 'America/New_York', coords: '38.91°N, 77.04°W', keywords: 'usa capital' },
+                { city: 'Boston', country: 'United States', tz: 'America/New_York', coords: '42.36°N, 71.06°W', keywords: 'usa' },
+                { city: 'Miami', country: 'United States', tz: 'America/New_York', coords: '25.76°N, 80.19°W', keywords: 'usa florida' },
+                { city: 'Chicago', country: 'United States', tz: 'America/Chicago', coords: '41.88°N, 87.63°W', keywords: 'usa illinois cst' },
+                { city: 'Dallas', country: 'United States', tz: 'America/Chicago', coords: '32.78°N, 96.80°W', keywords: 'usa texas' },
+                { city: 'Denver', country: 'United States', tz: 'America/Denver', coords: '39.74°N, 104.99°W', keywords: 'usa colorado mst' },
+                { city: 'Phoenix', country: 'United States', tz: 'America/Phoenix', coords: '33.45°N, 112.07°W', keywords: 'usa arizona' },
+                { city: 'Los Angeles', country: 'United States', tz: 'America/Los_Angeles', coords: '34.05°N, 118.24°W', keywords: 'usa california la pst' },
+                { city: 'San Francisco', country: 'United States', tz: 'America/Los_Angeles', coords: '37.77°N, 122.42°W', keywords: 'usa silicon valley' },
+                { city: 'Seattle', country: 'United States', tz: 'America/Los_Angeles', coords: '47.61°N, 122.33°W', keywords: 'usa washington' },
+                { city: 'Anchorage', country: 'United States', tz: 'America/Anchorage', coords: '61.22°N, 149.90°W', keywords: 'usa alaska' },
+                { city: 'Honolulu', country: 'United States', tz: 'Pacific/Honolulu', coords: '21.31°N, 157.86°W', keywords: 'usa hawaii' },
+                { city: 'Toronto', country: 'Canada', tz: 'America/Toronto', coords: '43.65°N, 79.38°W', keywords: 'ontario' },
+                { city: 'Vancouver', country: 'Canada', tz: 'America/Vancouver', coords: '49.28°N, 123.12°W', keywords: 'bc' },
+                { city: 'Montreal', country: 'Canada', tz: 'America/Toronto', coords: '45.50°N, 73.57°W', keywords: 'quebec' },
+                { city: 'St. John\'s', country: 'Canada', tz: 'America/St_Johns', coords: '47.56°N, 52.71°W', keywords: 'newfoundland half hour' },
+                { city: 'Mexico City', country: 'Mexico', tz: 'America/Mexico_City', coords: '19.43°N, 99.13°W', keywords: 'cdmx' },
+                { city: 'São Paulo', country: 'Brazil', tz: 'America/Sao_Paulo', coords: '23.55°S, 46.63°W', keywords: 'sao paulo brasil' },
+                { city: 'Rio de Janeiro', country: 'Brazil', tz: 'America/Sao_Paulo', coords: '22.91°S, 43.17°W', keywords: 'brasil' },
+                { city: 'Buenos Aires', country: 'Argentina', tz: 'America/Argentina/Buenos_Aires', coords: '34.60°S, 58.38°W', keywords: 'argentina' },
+                { city: 'Santiago', country: 'Chile', tz: 'America/Santiago', coords: '33.45°S, 70.67°W', keywords: 'chile' },
+                { city: 'Bogotá', country: 'Colombia', tz: 'America/Bogota', coords: '04.71°N, 74.07°W', keywords: 'bogota' },
+                { city: 'Lima', country: 'Peru', tz: 'America/Lima', coords: '12.05°S, 77.04°W', keywords: 'peru' },
+
+                // Asia & Middle East
+                { city: 'Tokyo', country: 'Japan', tz: 'Asia/Tokyo', coords: '35.68°N, 139.77°E', keywords: 'seiko casio citizen jst' },
+                { city: 'Osaka', country: 'Japan', tz: 'Asia/Tokyo', coords: '34.69°N, 135.50°E', keywords: 'japan' },
+                { city: 'Seoul', country: 'South Korea', tz: 'Asia/Seoul', coords: '37.57°N, 126.98°E', keywords: 'korea kst' },
+                { city: 'Beijing', country: 'China', tz: 'Asia/Shanghai', coords: '39.90°N, 116.41°E', keywords: 'prc' },
+                { city: 'Shanghai', country: 'China', tz: 'Asia/Shanghai', coords: '31.23°N, 121.47°E', keywords: 'prc' },
+                { city: 'Hong Kong', country: 'China (SAR)', tz: 'Asia/Hong_Kong', coords: '22.32°N, 114.17°E', keywords: 'hkt' },
+                { city: 'Taipei', country: 'Taiwan', tz: 'Asia/Taipei', coords: '25.03°N, 121.57°E', keywords: 'roc' },
+                { city: 'Singapore', country: 'Singapore', tz: 'Asia/Singapore', coords: '01.35°N, 103.82°E', keywords: 'sgt' },
+                { city: 'Bangkok', country: 'Thailand', tz: 'Asia/Bangkok', coords: '13.76°N, 100.50°E', keywords: 'siam' },
+                { city: 'Ho Chi Minh City', country: 'Vietnam', tz: 'Asia/Ho_Chi_Minh', coords: '10.82°N, 106.63°E', keywords: 'saigon' },
+                { city: 'Jakarta', country: 'Indonesia', tz: 'Asia/Jakarta', coords: '06.21°S, 106.85°E', keywords: 'java' },
+                { city: 'Manila', country: 'Philippines', tz: 'Asia/Manila', coords: '14.60°N, 120.98°E', keywords: 'pht' },
+                { city: 'Kuala Lumpur', country: 'Malaysia', tz: 'Asia/Kuala_Lumpur', coords: '03.14°N, 101.69°E', keywords: 'myt' },
+                { city: 'Mumbai', country: 'India', tz: 'Asia/Kolkata', coords: '19.08°N, 72.88°E', keywords: 'bombay ist' },
+                { city: 'New Delhi', country: 'India', tz: 'Asia/Kolkata', coords: '28.61°N, 77.21°E', keywords: 'india ist' },
+                { city: 'Kathmandu', country: 'Nepal', tz: 'Asia/Kathmandu', coords: '27.72°N, 85.32°E', keywords: 'quarter hour 45' },
+                { city: 'Dubai', country: 'United Arab Emirates', tz: 'Asia/Dubai', coords: '25.20°N, 55.27°E', keywords: 'uae gulf' },
+                { city: 'Riyadh', country: 'Saudi Arabia', tz: 'Asia/Riyadh', coords: '24.71°N, 46.68°E', keywords: 'ksa' },
+                { city: 'Doha', country: 'Qatar', tz: 'Asia/Qatar', coords: '25.29°N, 51.53°E', keywords: 'gulf' },
+                { city: 'Jerusalem', country: 'Israel', tz: 'Asia/Jerusalem', coords: '31.77°N, 35.21°E', keywords: 'tel aviv' },
+
+                // Oceania & Africa
+                { city: 'Sydney', country: 'Australia', tz: 'Australia/Sydney', coords: '33.87°S, 151.21°E', keywords: 'nsw aest' },
+                { city: 'Melbourne', country: 'Australia', tz: 'Australia/Melbourne', coords: '37.81°S, 144.96°E', keywords: 'victoria' },
+                { city: 'Perth', country: 'Australia', tz: 'Australia/Perth', coords: '31.95°S, 115.86°E', keywords: 'awst' },
+                { city: 'Auckland', country: 'New Zealand', tz: 'Pacific/Auckland', coords: '36.85°S, 174.76°E', keywords: 'nzst' },
+                { city: 'Cairo', country: 'Egypt', tz: 'Africa/Cairo', coords: '30.04°N, 31.24°E', keywords: 'nile' },
+                { city: 'Cape Town', country: 'South Africa', tz: 'Africa/Johannesburg', coords: '33.92°S, 18.42°E', keywords: 'sast' },
+                { city: 'Johannesburg', country: 'South Africa', tz: 'Africa/Johannesburg', coords: '26.20°S, 28.05°E', keywords: 'sast' },
+                { city: 'Nairobi', country: 'Kenya', tz: 'Africa/Nairobi', coords: '01.29°S, 36.82°E', keywords: 'eat' },
+                { city: 'Lagos', country: 'Nigeria', tz: 'Africa/Lagos', coords: '06.52°N, 03.38°E', keywords: 'wat' },
+                { city: 'Casablanca', country: 'Morocco', tz: 'Africa/Casablanca', coords: '33.57°N, 07.59°W', keywords: 'maghreb' }
+            ];
+
+            // New storage keys so old states don't conflict
+            const STORAGE_KEY_CLOCKS = 'world_watches_alfred_stengard_v2';
+            const STORAGE_KEY_THEME = 'world_watches_theme_v2';
+            const USER_LOCAL_TZ = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Stockholm';
+
+            let clocks = [];
+            let selectedNewDesign = 'swiss-railway';
+            let activeAutocompleteIndex = -1;
+            let currentFilteredSuggestions = [];
+
+            // DOM Elements
+            const clocksGrid = document.getElementById('clocksGrid');
+            const emptyState = document.getElementById('emptyState');
+            const clockCountBadge = document.getElementById('clockCountBadge');
+            const localReferenceBar = document.getElementById('localReferenceBar');
+            const citySearchInput = document.getElementById('citySearchInput');
+            const clearSearchBtn = document.getElementById('clearSearchBtn');
+            const autocompleteDropdown = document.getElementById('autocompleteDropdown');
+            const designSelectorGroup = document.getElementById('designSelectorGroup');
+            const selectedCaliberLabel = document.getElementById('selectedCaliberLabel');
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const themeToggleLabel = document.getElementById('themeToggleLabel');
+            const resetDefaultsBtn = document.getElementById('resetDefaultsBtn');
+            const emptyResetBtn = document.getElementById('emptyResetBtn');
+            const quickAddPills = document.getElementById('quickAddPills');
+            const toastContainer = document.getElementById('toastContainer');
+
+            // ============================================================================
+            // 3. PRECISION TIME & ANGLE ENGINE (100% Intl.DateTimeFormat)
+            // ============================================================================
+
+            function resolveLocalCityInfo(tz) {
+                const match = WORLD_CITIES.find(c => c.tz === tz);
+                if (match) {
+                    return { city: `${match.city}`, country: `${match.country} (Local)`, coords: match.coords };
+                }
+                const parts = tz.split('/');
+                const fallbackCity = (parts[parts.length - 1] || 'Local Reference').replace(/_/g, ' ');
+                return { city: fallbackCity, country: 'Local Reference Zone', coords: 'LOCAL TELEMETRY' };
+            }
+
+            function getDefaultClocks() {
+                const localInfo = resolveLocalCityInfo(USER_LOCAL_TZ);
+                return [
+                    {
+                        id: 'watch-local',
+                        city: localInfo.city,
+                        country: localInfo.country,
+                        tz: USER_LOCAL_TZ,
+                        coords: localInfo.coords,
+                        design: 'swiss-railway',
+                        isLocal: true
+                    },
+                    {
+                        id: 'watch-london',
+                        city: 'London',
+                        country: 'United Kingdom',
+                        tz: 'Europe/London',
+                        coords: '51.51°N, 00.13°W',
+                        design: 'split-flap',
+                        isLocal: false
+                    },
+                    {
+                        id: 'watch-newyork',
+                        city: 'New York',
+                        country: 'United States',
+                        tz: 'America/New_York',
+                        coords: '40.71°N, 74.01°W',
+                        design: 'chrono-diver',
+                        isLocal: false
+                    },
+                    {
+                        id: 'watch-tokyo',
+                        city: 'Tokyo',
+                        country: 'Japan',
+                        tz: 'Asia/Tokyo',
+                        coords: '35.68°N, 139.77°E',
+                        design: 'casio-lcd',
+                        isLocal: false
+                    },
+                    {
+                        id: 'watch-geneva',
+                        city: 'Geneva',
+                        country: 'Switzerland',
+                        tz: 'Europe/Zurich',
+                        coords: '46.20°N, 06.14°E',
+                        design: 'bauhaus-bill',
+                        isLocal: false
+                    },
+                    {
+                        id: 'watch-sydney',
+                        city: 'Sydney',
+                        country: 'Australia',
+                        tz: 'Australia/Sydney',
+                        coords: '33.87°S, 151.21°E',
+                        design: 'nixie-tube',
+                        isLocal: false
+                    }
+                ];
+            }
+
+            /**
+             * Extracts exact wall-clock components and computes exact SVG angles
+             * where 0 deg = 12 o'clock, 90 deg = 3 o'clock, 180 deg = 6 o'clock, 270 deg = 9 o'clock.
+             */
+            function getTimeZoneComponents(date, timeZone) {
+                try {
+                    const formatter = new Intl.DateTimeFormat('en-US', {
+                        timeZone: timeZone,
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        weekday: 'short',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: false
+                    });
+
+                    const parts = formatter.formatToParts(date);
+                    const map = {};
+                    for (const part of parts) {
+                        if (part.type !== 'literal') {
+                            map[part.type] = part.value;
+                        }
+                    }
+
+                    // Normalize hour (Intl hour12:false can return "24" at midnight in some engines)
+                    const hours = parseInt(map.hour, 10) % 24;
+                    const minutes = parseInt(map.minute, 10);
+                    const seconds = parseInt(map.second, 10);
+
+                    // CRITICAL ANALOG TRIGONOMETRY:
+                    // All hands are drawn pointing straight UP from (100,100) to (100, y<100).
+                    // Rotating clockwise around (100,100):
+                    const hourAngle = ((hours % 12) + minutes / 60 + seconds / 3600) * 30;
+                    const minuteAngle = (minutes + seconds / 60) * 6;
+                    const secondAngle = seconds * 6;
+                    const hour24Angle = (hours + minutes / 60) * 15; // For 24h Chronograph sub-dial
+
+                    const dateFormatter = new Intl.DateTimeFormat('en-US', {
+                        timeZone: timeZone,
+                        weekday: 'short',
+                        month: 'short',
+                        day: '2-digit',
+                        year: 'numeric'
+                    });
+
+                    const hour12Num = hours % 12 === 0 ? 12 : hours % 12;
+                    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+                    return {
+                        year: parseInt(map.year, 10),
+                        month: parseInt(map.month, 10),
+                        day: parseInt(map.day, 10),
+                        dayStr: String(parseInt(map.day, 10)).padStart(2, '0'),
+                        weekdayShort: (map.weekday || 'MON').toUpperCase(),
+                        hours,
+                        minutes,
+                        seconds,
+                        hourStr: String(hours).padStart(2, '0'),
+                        hour12Str: String(hour12Num).padStart(2, '0'),
+                        minuteStr: String(minutes).padStart(2, '0'),
+                        secondStr: String(seconds).padStart(2, '0'),
+                        ampm,
+                        hourAngle,
+                        minuteAngle,
+                        secondAngle,
+                        hour24Angle,
+                        formattedDate: dateFormatter.format(date).toUpperCase()
+                    };
+                } catch (err) {
+                    const h = date.getHours();
+                    const m = date.getMinutes();
+                    const s = date.getSeconds();
+                    return {
+                        year: date.getFullYear(),
+                        month: date.getMonth() + 1,
+                        day: date.getDate(),
+                        dayStr: String(date.getDate()).padStart(2, '0'),
+                        weekdayShort: 'LOC',
+                        hours: h,
+                        minutes: m,
+                        seconds: s,
+                        hourStr: String(h).padStart(2, '0'),
+                        hour12Str: String(h % 12 || 12).padStart(2, '0'),
+                        minuteStr: String(m).padStart(2, '0'),
+                        secondStr: String(s).padStart(2, '0'),
+                        ampm: h >= 12 ? 'PM' : 'AM',
+                        hourAngle: ((h % 12) + m / 60 + s / 3600) * 30,
+                        minuteAngle: (m + s / 60) * 6,
+                        secondAngle: s * 6,
+                        hour24Angle: (h + m / 60) * 15,
+                        formattedDate: date.toDateString().toUpperCase()
+                    };
+                }
+            }
+
+            function getOffsetDiffLabel(date, targetTz, isLocalFlag) {
+                const target = getTimeZoneComponents(date, targetTz);
+                const local = getTimeZoneComponents(date, USER_LOCAL_TZ);
+
+                const targetAsUTC = Date.UTC(target.year, target.month - 1, target.day, target.hours, target.minutes, target.seconds);
+                const localAsUTC = Date.UTC(local.year, local.month - 1, local.day, local.hours, local.minutes, local.seconds);
+
+                const diffMinutes = Math.round((targetAsUTC - localAsUTC) / 60000);
+
+                if (diffMinutes === 0) {
+                    return isLocalFlag ? 'LOCAL REF' : '±0H SYNC';
+                }
+
+                const diffHours = diffMinutes / 60;
+                const sign = diffHours > 0 ? '+' : '−';
+                const absHours = Math.abs(diffHours);
+
+                const formattedNumber = Number.isInteger(absHours)
+                    ? String(absHours)
+                    : absHours.toFixed(2).replace(/\.?0+$/, '');
+
+                return `${sign}${formattedNumber}H`;
+            }
+
+            // ============================================================================
+            // 4. 7 DISTINCT HOROLOGICAL WATCH FACE RENDERERS
+            // ============================================================================
+
+            function getBcdColumnMarkup(digit, bitCount) {
+                let dots = '';
+                for (let b = bitCount - 1; b >= 0; b--) {
+                    const isOn = ((digit >> b) & 1) === 1;
+                    dots += `<span data-bit="${b}" class="w-3 h-3 border hairline-border transition-colors ${
+                        isOn ? 'bg-intlOrange shadow-[0_0_6px_#FF4F00]' : 'bg-neutral-300/30 dark:bg-neutral-800/60'
+                    }"></span>`;
+                }
+                return dots;
+            }
+
+            function createWatchFaceMarkup(clock, t) {
+                const { hourStr, minuteStr, secondStr, dayStr, weekdayShort, ampm, hourAngle, minuteAngle, secondAngle, hour24Angle } = t;
+
+                switch (clock.design) {
+                    // --------------------------------------------------------------------
+                    // 1. SWISS RAILWAY (MONDAINE ICONIC ANALOG)
+                    // --------------------------------------------------------------------
+                    case 'swiss-railway': {
+                        let markers = '';
+                        for (let i = 0; i < 60; i++) {
+                            const deg = i * 6;
+                            const isHour = i % 5 === 0;
+                            if (isHour) {
+                                markers += `<rect x="97.5" y="14" width="5" height="15" class="fill-neutral-900 dark:fill-paper" transform="rotate(${deg} 100 100)" />`;
+                            } else {
+                                markers += `<rect x="99" y="14" width="2" height="6.5" class="fill-neutral-800 dark:fill-neutral-300" transform="rotate(${deg} 100 100)" />`;
+                            }
+                        }
+
+                        return `
+                            <div class="flex flex-col items-center justify-center py-2">
+                                <div class="w-48 h-48 relative">
+                                    <svg viewBox="0 0 200 200" class="w-full h-full">
+                                        <!-- Brushed Steel Outer Bezel -->
+                                        <circle cx="100" cy="100" r="95" class="fill-white dark:fill-[#121211] stroke-neutral-900 dark:stroke-neutral-300" stroke-width="4" />
+                                        <circle cx="100" cy="100" r="90" class="fill-none stroke-neutral-300 dark:stroke-neutral-800" stroke-width="0.75" />
+                                        ${markers}
+                                        <!-- Dial Branding -->
+                                        <text x="100" y="62" text-anchor="middle" class="fill-neutral-900 dark:fill-paper font-sans font-bold text-[8px] tracking-[0.2em]">SBB CFF FFS</text>
+                                        <text x="100" y="146" text-anchor="middle" class="fill-neutral-500 font-mono text-[6.5px] tracking-widest">ALFRED STENGARD</text>
+
+                                        <!-- Hour Hand (Pointing straight UP at 0 deg) -->
+                                        <g data-role="hour-hand" transform="rotate(${hourAngle} 100 100)">
+                                            <polygon points="96,114 97.2,46 102.8,46 104,114" class="fill-neutral-900 dark:fill-paper" />
+                                        </g>
+
+                                        <!-- Minute Hand (Pointing straight UP at 0 deg) -->
+                                        <g data-role="minute-hand" transform="rotate(${minuteAngle} 100 100)">
+                                            <polygon points="97,118 98.2,22 101.8,22 103,118" class="fill-neutral-900 dark:fill-paper" />
+                                        </g>
+
+                                        <!-- Iconic Red Mondaine Second Hand (Pointing straight UP at 0 deg) -->
+                                        <g data-role="second-hand" transform="rotate(${secondAngle} 100 100)">
+                                            <line x1="100" y1="124" x2="100" y2="38" stroke="#FF2A00" stroke-width="2" />
+                                            <circle cx="100" cy="34" r="6" fill="#FF2A00" />
+                                            <circle cx="100" cy="100" r="3.5" fill="#FF2A00" />
+                                        </g>
+                                        <circle cx="100" cy="100" r="1.5" class="fill-white dark:fill-obsidian" />
+                                    </svg>
+                                </div>
+                                <div class="mt-2 font-mono text-[11px] tracking-widest text-neutral-500 flex items-center gap-2">
+                                    <span>SWISS OFFICIAL RAILWAY</span>
+                                    <span>•</span>
+                                    <span data-role="digital-sub" class="text-obsidian dark:text-paper font-semibold">${hourStr}:${minuteStr}:${secondStr}</span>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    // --------------------------------------------------------------------
+                    // 2. CHRONOGRAPH DIVERS (SUB-DIAL + DATE WINDOW ANALOG)
+                    // --------------------------------------------------------------------
+                    case 'chrono-diver': {
+                        let diverTicks = '';
+                        for (let i = 0; i < 60; i++) {
+                            const deg = i * 6;
+                            const isFive = i % 5 === 0;
+                            if (i === 0) continue; // 12 o'clock has luminous triangle
+                            if (isFive) {
+                                diverTicks += `<rect x="98" y="16" width="4" height="11" rx="2" fill="#E8E4D9" stroke="#111" stroke-width="0.5" transform="rotate(${deg} 100 100)" />`;
+                            } else {
+                                diverTicks += `<line x1="100" y1="15" x2="100" y2="20" stroke="#8E8D87" stroke-width="1" transform="rotate(${deg} 100 100)" />`;
+                            }
+                        }
+
+                        return `
+                            <div class="flex flex-col items-center justify-center py-2">
+                                <div class="w-48 h-48 relative">
+                                    <svg viewBox="0 0 200 200" class="w-full h-full">
+                                        <!-- Knurled Diver Bezel -->
+                                        <circle cx="100" cy="100" r="96" fill="#161816" stroke="#2E2E2A" stroke-width="2" />
+                                        <circle cx="100" cy="100" r="86" fill="#0F1715" stroke="#E5A93C" stroke-width="1.2" />
+                                        <!-- Bezel Pip -->
+                                        <circle cx="100" cy="8" r="3" fill="#FF4F00" />
+                                        ${diverTicks}
+                                        <!-- 12 O'Clock Inverted Luminous Triangle -->
+                                        <polygon points="92,16 108,16 100,30" fill="#E5A93C" />
+
+                                        <!-- Dial Inscriptions -->
+                                        <text x="100" y="54" text-anchor="middle" fill="#F4F1EA" class="font-serif italic text-[11px] tracking-wider">Chronometer</text>
+                                        <text x="100" y="64" text-anchor="middle" fill="#E5A93C" class="font-mono text-[6.5px] tracking-[0.2em]">300M / 1000FT</text>
+
+                                        <!-- 3 O'Clock Date Window -->
+                                        <rect x="144" y="92" width="22" height="16" rx="1" fill="#F4F1EA" stroke="#E5A93C" stroke-width="1.2" />
+                                        <text data-role="date-window" x="155" y="103.5" text-anchor="middle" fill="#0D0D0C" class="font-mono font-bold text-[10px]">${dayStr}</text>
+
+                                        <!-- 6 O'Clock 24-Hour Sub-Dial -->
+                                        <circle cx="100" cy="142" r="22" fill="#090D0C" stroke="#5C5B57" stroke-width="1" />
+                                        <text x="100" y="127" text-anchor="middle" fill="#8E8D87" class="font-mono text-[6px]">24</text>
+                                        <text x="116" y="144" text-anchor="middle" fill="#8E8D87" class="font-mono text-[6px]">6</text>
+                                        <text x="100" y="160" text-anchor="middle" fill="#8E8D87" class="font-mono text-[6px]">12</text>
+                                        <text x="84" y="144" text-anchor="middle" fill="#8E8D87" class="font-mono text-[6px]">18</text>
+                                        <g data-role="sub24-hand" transform="rotate(${hour24Angle} 100 142)">
+                                            <line x1="100" y1="142" x2="100" y2="125" stroke="#FF4F00" stroke-width="1.5" stroke-linecap="round" />
+                                            <circle cx="100" cy="142" r="2" fill="#E5A93C" />
+                                        </g>
+
+                                        <!-- Hour Hand (Pointing straight UP at 0 deg) -->
+                                        <g data-role="hour-hand" transform="rotate(${hourAngle} 100 100)">
+                                            <polygon points="96,110 96.5,52 100,44 103.5,52 104,110" fill="#F4F1EA" stroke="#E5A93C" stroke-width="1" />
+                                            <circle cx="100" cy="64" r="4.5" fill="#E5A93C" />
+                                        </g>
+
+                                        <!-- Minute Hand (Pointing straight UP at 0 deg) -->
+                                        <g data-role="minute-hand" transform="rotate(${minuteAngle} 100 100)">
+                                            <polygon points="97,114 98,24 100,19 102,24 103,114" fill="#F4F1EA" stroke="#E5A93C" stroke-width="1" />
+                                        </g>
+
+                                        <!-- Second Hand with Luminous Lollipop (Pointing straight UP at 0 deg) -->
+                                        <g data-role="second-hand" transform="rotate(${secondAngle} 100 100)">
+                                            <line x1="100" y1="120" x2="100" y2="22" stroke="#FF4F00" stroke-width="1.5" />
+                                            <circle cx="100" cy="36" r="3.5" fill="#F4F1EA" stroke="#FF4F00" stroke-width="1.5" />
+                                        </g>
+
+                                        <circle cx="100" cy="100" r="4" fill="#E5A93C" />
+                                        <circle cx="100" cy="100" r="1.5" fill="#0D0D0C" />
+                                    </svg>
+                                </div>
+                                <div class="mt-2 font-mono text-[11px] tracking-widest text-neutral-500 flex items-center gap-2">
+                                    <span>SUPERLATIVE DIVER</span>
+                                    <span>•</span>
+                                    <span data-role="digital-sub" class="text-obsidian dark:text-paper font-semibold">${hourStr}:${minuteStr}:${secondStr}</span>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    // --------------------------------------------------------------------
+                    // 3. BAUHAUS MAX BILL (ULTRA-MINIMALIST ARCHITECTURAL ANALOG)
+                    // --------------------------------------------------------------------
+                    case 'bauhaus-bill': {
+                        let bauhausLines = '';
+                        for (let i = 0; i < 60; i++) {
+                            const deg = i * 6;
+                            const isHour = i % 5 === 0;
+                            const y1 = isHour ? 11 : 11;
+                            const y2 = isHour ? 22 : 15;
+                            bauhausLines += `<line x1="100" y1="${y1}" x2="100" y2="${y2}" class="stroke-neutral-800 dark:stroke-neutral-300" stroke-width="${isHour ? '1.2' : '0.6'}" transform="rotate(${deg} 100 100)" />`;
+                        }
+
+                        return `
+                            <div class="flex flex-col items-center justify-center py-2">
+                                <div class="w-48 h-48 relative">
+                                    <svg viewBox="0 0 200 200" class="w-full h-full">
+                                        <circle cx="100" cy="100" r="95" class="fill-[#FAF8F2] dark:fill-[#151513] stroke-neutral-900 dark:stroke-neutral-400" stroke-width="1.2" />
+                                        ${bauhausLines}
+                                        <!-- Dessau Typography Numerals -->
+                                        <text x="100" y="34" text-anchor="middle" class="fill-neutral-900 dark:fill-paper font-sans text-[11px] tracking-tighter">12</text>
+                                        <text x="169" y="104" text-anchor="middle" class="fill-neutral-900 dark:fill-paper font-sans text-[11px]">3</text>
+                                        <text x="100" y="175" text-anchor="middle" class="fill-neutral-900 dark:fill-paper font-sans text-[11px]">6</text>
+                                        <text x="31" y="104" text-anchor="middle" class="fill-neutral-900 dark:fill-paper font-sans text-[11px]">9</text>
+                                        <text x="100" y="138" text-anchor="middle" class="fill-neutral-400 font-mono text-[6px] tracking-[0.25em]">DESSAU // AS</text>
+
+                                        <!-- Needle Hour Hand -->
+                                        <g data-role="hour-hand" transform="rotate(${hourAngle} 100 100)">
+                                            <line x1="100" y1="112" x2="100" y2="48" class="stroke-neutral-900 dark:stroke-paper" stroke-width="2.4" stroke-linecap="round" />
+                                        </g>
+
+                                        <!-- Needle Minute Hand -->
+                                        <g data-role="minute-hand" transform="rotate(${minuteAngle} 100 100)">
+                                            <line x1="100" y1="116" x2="100" y2="20" class="stroke-neutral-900 dark:stroke-paper" stroke-width="1.5" stroke-linecap="round" />
+                                        </g>
+
+                                        <!-- International Orange Hairline Second Hand -->
+                                        <g data-role="second-hand" transform="rotate(${secondAngle} 100 100)">
+                                            <line x1="100" y1="120" x2="100" y2="16" stroke="#FF4F00" stroke-width="1" />
+                                        </g>
+                                        <circle cx="100" cy="100" r="2.8" class="fill-neutral-900 dark:fill-paper" />
+                                    </svg>
+                                </div>
+                                <div class="mt-2 font-mono text-[11px] tracking-widest text-neutral-500 flex items-center gap-2">
+                                    <span>BAUHAUS ARCHIVE</span>
+                                    <span>•</span>
+                                    <span data-role="digital-sub" class="text-obsidian dark:text-paper font-semibold">${hourStr}:${minuteStr}:${secondStr}</span>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    // --------------------------------------------------------------------
+                    // 4. SPLIT-FLAP MECHANICAL DIGITAL (SOLARI UDINE / BRAUN STYLE)
+                    // --------------------------------------------------------------------
+                    case 'split-flap':
+                        return `
+                            <div class="flex flex-col items-center justify-center py-6">
+                                <div class="p-3.5 bg-[#121210] border-2 border-neutral-800 shadow-inner w-full max-w-[290px]">
+                                    <div class="flex items-center justify-between mb-2 px-1">
+                                        <span class="font-mono text-[9px] tracking-widest text-neutral-400">SOLARI TELEMETRY</span>
+                                        <span data-role="ampm" class="font-mono text-[9px] px-1.5 py-0.2 bg-intlOrange text-white font-bold">${ampm}</span>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <!-- Hours Flap -->
+                                        <div class="flap-unit py-4 text-center border border-neutral-700">
+                                            <span data-role="hour" class="font-sans font-bold text-4xl sm:text-5xl text-[#F4F1EA] tracking-tight tabular-nums">${hourStr}</span>
+                                            <span class="block font-mono text-[8px] text-neutral-500 mt-1">HR</span>
+                                        </div>
+                                        <!-- Minutes Flap -->
+                                        <div class="flap-unit py-4 text-center border border-neutral-700">
+                                            <span data-role="minute" class="font-sans font-bold text-4xl sm:text-5xl text-[#F4F1EA] tracking-tight tabular-nums">${minuteStr}</span>
+                                            <span class="block font-mono text-[8px] text-neutral-500 mt-1">MIN</span>
+                                        </div>
+                                        <!-- Seconds Flap -->
+                                        <div class="flap-unit py-4 text-center border border-neutral-700">
+                                            <span data-role="second" class="font-mono font-bold text-3xl sm:text-4xl text-intlOrange tracking-tight tabular-nums">${secondStr}</span>
+                                            <span class="block font-mono text-[8px] text-neutral-500 mt-1">SEC</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-3 font-mono text-[10px] tracking-widest uppercase text-neutral-500">
+                                    ELECTRO-MECHANICAL SPLIT-FLAP
+                                </div>
+                            </div>
+                        `;
+
+                    // --------------------------------------------------------------------
+                    // 5. CASIO F-91W VINTAGE QUARTZ LCD
+                    // --------------------------------------------------------------------
+                    case 'casio-lcd':
+                        return `
+                            <div class="flex flex-col items-center justify-center py-5">
+                                <!-- Retro Resin Watch Bezel -->
+                                <div class="w-full max-w-[290px] bg-[#18191C] border-2 border-neutral-700 p-3.5 relative shadow-lg">
+                                    <!-- Top Bezel Branding -->
+                                    <div class="flex items-center justify-between text-[9px] font-mono mb-1.5 px-1">
+                                        <span class="font-bold tracking-widest text-paper">QUARTZ F-91W</span>
+                                        <span class="text-[#38BDF8] font-bold">ILLUMINATOR</span>
+                                    </div>
+                                    <!-- Red & Blue Striping -->
+                                    <div class="h-0.5 w-full bg-[#38BDF8] mb-2"></div>
+
+                                    <!-- Greenish-Grey Reflective LCD Panel -->
+                                    <div class="casio-lcd p-3 font-mono select-none">
+                                        <div class="flex items-center justify-between text-[10px] font-bold border-b border-[#6C775B] pb-1 mb-2">
+                                            <div class="flex items-center gap-1.5">
+                                                <span class="px-1 border border-[#161C12] text-[8px]">24H</span>
+                                                <span>ALM SIG</span>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <span data-role="weekday-lcd">${weekdayShort}</span>
+                                                <span data-role="day-lcd" class="px-1 bg-[#161C12] text-[#9CA986]">${dayStr}</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-baseline justify-center gap-1 py-1">
+                                            <span data-role="hour" class="text-4xl sm:text-5xl font-bold tracking-tighter tabular-nums">${hourStr}</span>
+                                            <span class="text-3xl font-bold blink-sep">:</span>
+                                            <span data-role="minute" class="text-4xl sm:text-5xl font-bold tracking-tighter tabular-nums">${minuteStr}</span>
+                                            <span data-role="second" class="text-xl font-bold ml-1 tabular-nums">${secondStr}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Bottom Bezel Legend -->
+                                    <div class="flex items-center justify-between text-[8px] font-mono text-neutral-400 mt-2 px-1">
+                                        <span>◄ LIGHT / MODE</span>
+                                        <span class="text-[#FF4F00] font-bold">WATER RESIST</span>
+                                        <span>ALARM ON-OFF / 24HR ►</span>
+                                    </div>
+                                </div>
+                                <div class="mt-2.5 font-mono text-[10px] tracking-widest uppercase text-neutral-500">
+                                    DIGITAL QUARTZ MODULE 593
+                                </div>
+                            </div>
+                        `;
+
+                    // --------------------------------------------------------------------
+                    // 6. NIXIE TUBE CATHODE GLOW DIGITAL
+                    // --------------------------------------------------------------------
+                    case 'nixie-tube': {
+                        const h1 = hourStr[0], h2 = hourStr[1];
+                        const m1 = minuteStr[0], m2 = minuteStr[1];
+                        const s1 = secondStr[0], s2 = secondStr[1];
+
+                        return `
+                            <div class="flex flex-col items-center justify-center py-5">
+                                <div class="w-full max-w-[295px] bg-[#0B0908] border-2 border-[#3A2618] p-3.5 shadow-xl">
+                                    <div class="flex items-center justify-between text-[9px] font-mono text-amber-500/70 mb-2">
+                                        <span>IN-18 COLD CATHODE</span>
+                                        <span>170V DC ANODE</span>
+                                    </div>
+                                    <div class="grid grid-cols-6 gap-1.5">
+                                        <div class="nixie-tube h-20 rounded-t-full border border-amber-900/60 flex items-center justify-center">
+                                            <span data-role="nixie-h1" class="nixie-digit font-mono text-3xl font-bold tabular-nums">${h1}</span>
+                                        </div>
+                                        <div class="nixie-tube h-20 rounded-t-full border border-amber-900/60 flex items-center justify-center">
+                                            <span data-role="nixie-h2" class="nixie-digit font-mono text-3xl font-bold tabular-nums">${h2}</span>
+                                        </div>
+                                        <div class="nixie-tube h-20 rounded-t-full border border-amber-900/60 flex items-center justify-center">
+                                            <span data-role="nixie-m1" class="nixie-digit font-mono text-3xl font-bold tabular-nums">${m1}</span>
+                                        </div>
+                                        <div class="nixie-tube h-20 rounded-t-full border border-amber-900/60 flex items-center justify-center">
+                                            <span data-role="nixie-m2" class="nixie-digit font-mono text-3xl font-bold tabular-nums">${m2}</span>
+                                        </div>
+                                        <div class="nixie-tube h-20 rounded-t-full border border-amber-900/60 flex items-center justify-center">
+                                            <span data-role="nixie-s1" class="nixie-digit font-mono text-2xl font-bold tabular-nums">${s1}</span>
+                                        </div>
+                                        <div class="nixie-tube h-20 rounded-t-full border border-amber-900/60 flex items-center justify-center">
+                                            <span data-role="nixie-s2" class="nixie-digit font-mono text-2xl font-bold tabular-nums">${s2}</span>
+                                        </div>
+                                    </div>
+                                    <!-- Brass Base Plate -->
+                                    <div class="mt-2 h-2 bg-gradient-to-r from-[#5A3E1B] via-[#C89D54] to-[#5A3E1B] border border-amber-950"></div>
+                                </div>
+                                <div class="mt-2.5 font-mono text-[10px] tracking-widest uppercase text-neutral-500">
+                                    VACUUM DISCHARGE TELEMETRY
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    // --------------------------------------------------------------------
+                    // 7. BINARY HOROLOGICAL BCD MATRIX
+                    // --------------------------------------------------------------------
+                    case 'binary-matrix': {
+                        const digits = [
+                            parseInt(hourStr[0], 10),
+                            parseInt(hourStr[1], 10),
+                            parseInt(minuteStr[0], 10),
+                            parseInt(minuteStr[1], 10),
+                            parseInt(secondStr[0], 10),
+                            parseInt(secondStr[1], 10)
+                        ];
+                        const dayPct = (((t.hours * 3600 + t.minutes * 60 + t.seconds) / 86400) * 100).toFixed(1);
+
+                        return `
+                            <div class="flex flex-col items-center justify-center py-4">
+                                <div class="w-full max-w-[290px] border hairline-border bg-paperDark/50 dark:bg-obsidian p-3.5">
+                                    <div class="flex items-center justify-between font-mono text-[9px] text-neutral-500 mb-2">
+                                        <span>BCD 8-4-2-1 MATRIX</span>
+                                        <span data-role="day-pct">SOLAR CYCLE: ${dayPct}%</span>
+                                    </div>
+                                    <!-- 6-Column Binary Coded Decimal Grid -->
+                                    <div data-role="bcd-grid" class="grid grid-cols-6 gap-2 py-2 px-3 border hairline-border bg-paper dark:bg-obsidianPanel justify-items-center">
+                                        ${digits.map((d, idx) => `
+                                            <div data-bcd-col="${idx}" class="flex flex-col gap-1.5 items-center justify-end">
+                                                ${getBcdColumnMarkup(d, 4)}
+                                                <span data-bcd-val="${idx}" class="font-mono text-[10px] font-bold mt-1 text-obsidian dark:text-paper">${d}</span>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                    <div class="mt-2.5 flex items-center justify-between font-mono text-xs">
+                                        <span class="text-[10px] text-neutral-500">SYNTHESIS:</span>
+                                        <span data-role="digital-sub" class="font-bold tracking-widest text-intlOrange">${hourStr}:${minuteStr}:${secondStr}</span>
+                                    </div>
+                                </div>
+                                <div class="mt-2 font-mono text-[10px] tracking-widest uppercase text-neutral-500">
+                                    BINARY CODED DECIMAL CHRONOGRAPH
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+
+            // ============================================================================
+            // 5. CARD & COLLECTION RENDERING
+            // ============================================================================
+
+            function getDayNightIndicator(hours) {
+                const isDay = hours >= 6 && hours < 18;
+                if (isDay) {
+                    return `
+                        <span class="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase px-2 py-0.5 border hairline-border bg-signalYellow/20 text-obsidian dark:text-signalYellow">
+                            <span class="w-1.5 h-1.5 rounded-full bg-signalYellow"></span>
+                            <span>DAY</span>
+                        </span>
+                    `;
+                }
+                return `
+                    <span class="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase px-2 py-0.5 border hairline-border bg-neutral-900 text-paper dark:bg-neutral-800 dark:text-neutral-300">
+                        <span class="w-1.5 h-1.5 rounded-full bg-intlOrange"></span>
+                        <span>NIGHT</span>
+                    </span>
+                `;
+            }
+
+            function renderAllClocks() {
+                const now = new Date();
+                clockCountBadge.textContent = String(clocks.length).padStart(2, '0');
+
+                if (clocks.length === 0) {
+                    clocksGrid.innerHTML = '';
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+
+                emptyState.classList.add('hidden');
+
+                clocksGrid.innerHTML = clocks.map((clock, index) => {
+                    const t = getTimeZoneComponents(now, clock.tz);
+                    const diffLabel = getOffsetDiffLabel(now, clock.tz, clock.isLocal);
+                    const serialNo = `NO.${String(index + 1).padStart(2, '0')}`;
+
+                    return `
+                        <article data-clock-id="${clock.id}"
+                            class="border hairline-border bg-paper dark:bg-obsidianPanel flex flex-col justify-between transition-transform hover:-translate-y-0.5 shadow-[4px_4px_0px_#1A1A18] dark:shadow-[4px_4px_0px_#2E2E2A]">
+                            
+                            <!-- Top Technical Spec Bar -->
+                            <div class="border-b hairline-border px-4 py-2 flex items-center justify-between bg-paperDark/60 dark:bg-black/40 font-mono text-[10px] uppercase tracking-wider">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-intlOrange">${serialNo}</span>
+                                    <span>//</span>
+                                    <span class="truncate max-w-[160px]" title="${clock.tz}">${clock.tz}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div data-role="day-night-badge">${getDayNightIndicator(t.hours)}</div>
+                                    <button type="button" data-action="remove-clock" data-id="${clock.id}"
+                                        title="Remove Instrument" aria-label="Remove ${clock.city}"
+                                        class="px-1.5 py-0.5 border hairline-border hover:bg-intlOrange hover:text-white transition-colors font-bold">
+                                        ✕
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- City & Telemetry Header -->
+                            <div class="px-5 pt-4 pb-2 flex items-baseline justify-between gap-2 border-b hairline-border border-dashed">
+                                <div class="min-w-0">
+                                    <h3 class="font-sans font-bold text-2xl tracking-tight uppercase truncate" title="${clock.city}">${clock.city}</h3>
+                                    <p class="font-mono text-[11px] text-neutral-500 uppercase truncate">${clock.country} • ${clock.coords || 'IANA SYNC'}</p>
+                                </div>
+                                <span data-role="diff-label" class="font-mono text-xs font-bold px-2 py-1 border hairline-border bg-paperDark dark:bg-obsidian text-intlOrange shrink-0">
+                                    ${diffLabel}
+                                </span>
+                            </div>
+
+                            <!-- Horological Watch Face Container -->
+                            <div data-role="clock-face-container" class="px-4 py-3 flex-1 flex items-center justify-center">
+                                ${createWatchFaceMarkup(clock, t)}
+                            </div>
+
+                            <!-- Bottom Instrument Bar: Date & Caliber Switcher -->
+                            <div class="border-t hairline-border px-4 py-2.5 bg-paperDark/30 dark:bg-black/20 flex items-center justify-between gap-2 font-mono text-[11px]">
+                                <span data-role="date-label" class="font-semibold uppercase tracking-wider truncate">${t.formattedDate}</span>
+
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <label class="sr-only" for="select-${clock.id}">Watch Caliber</label>
+                                    <select id="select-${clock.id}" data-action="select-design" data-id="${clock.id}"
+                                        class="font-mono text-[10px] uppercase tracking-wider px-2 py-1 border hairline-border bg-paper dark:bg-obsidian text-obsidian dark:text-paper focus:outline-none focus:border-intlOrange cursor-pointer">
+                                        ${DESIGNS.map(d => `<option value="${d.id}" ${d.id === clock.design ? 'selected' : ''}>${d.code} — ${d.short}</option>`).join('')}
+                                    </select>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                }).join('');
+            }
+
+            /**
+             * Real-time 1Hz telemetry tick. Updates SVG transform attributes directly
+             * for zero-flicker, mathematically exact analog hand positioning.
+             */
+            function tickUpdateClocks() {
+                const now = new Date();
+
+                // Update Local Reference Bar
+                const localData = getTimeZoneComponents(now, USER_LOCAL_TZ);
+                localReferenceBar.textContent = `LOCAL REFERENCE: ${USER_LOCAL_TZ.toUpperCase()} // ${localData.hourStr}:${localData.minuteStr}:${localData.secondStr} (${localData.formattedDate})`;
+
+                clocks.forEach(clock => {
+                    const card = clocksGrid.querySelector(`[data-clock-id="${clock.id}"]`);
+                    if (!card) return;
+
+                    const t = getTimeZoneComponents(now, clock.tz);
+
+                    // 1. Update Analog Hands via pure SVG rotate(angle 100 100)
+                    const hourHand = card.querySelector('[data-role="hour-hand"]');
+                    const minuteHand = card.querySelector('[data-role="minute-hand"]');
+                    const secondHand = card.querySelector('[data-role="second-hand"]');
+
+                    if (hourHand) hourHand.setAttribute('transform', `rotate(${t.hourAngle} 100 100)`);
+                    if (minuteHand) minuteHand.setAttribute('transform', `rotate(${t.minuteAngle} 100 100)`);
+                    if (secondHand) secondHand.setAttribute('transform', `rotate(${t.secondAngle} 100 100)`);
+
+                    // Chronograph Diver 24h sub-dial & date window
+                    const sub24Hand = card.querySelector('[data-role="sub24-hand"]');
+                    if (sub24Hand) sub24Hand.setAttribute('transform', `rotate(${t.hour24Angle} 100 142)`);
+                    const dateWin = card.querySelector('[data-role="date-window"]');
+                    if (dateWin) dateWin.textContent = t.dayStr;
+
+                    // 2. Update Standard Digital Readouts
+                    const hourEl = card.querySelector('[data-role="hour"]');
+                    const minuteEl = card.querySelector('[data-role="minute"]');
+                    const secondEl = card.querySelector('[data-role="second"]');
+                    if (hourEl) hourEl.textContent = t.hourStr;
+                    if (minuteEl) minuteEl.textContent = t.minuteStr;
+                    if (secondEl) secondEl.textContent = t.secondStr;
+
+                    const ampmEl = card.querySelector('[data-role="ampm"]');
+                    if (ampmEl) ampmEl.textContent = t.ampm;
+
+                    const wkLcd = card.querySelector('[data-role="weekday-lcd"]');
+                    const dayLcd = card.querySelector('[data-role="day-lcd"]');
+                    if (wkLcd) wkLcd.textContent = t.weekdayShort;
+                    if (dayLcd) dayLcd.textContent = t.dayStr;
+
+                    // 3. Update Nixie Tubes
+                    const nixieH1 = card.querySelector('[data-role="nixie-h1"]');
+                    if (nixieH1) {
+                        nixieH1.textContent = t.hourStr[0];
+                        card.querySelector('[data-role="nixie-h2"]').textContent = t.hourStr[1];
+                        card.querySelector('[data-role="nixie-m1"]').textContent = t.minuteStr[0];
+                        card.querySelector('[data-role="nixie-m2"]').textContent = t.minuteStr[1];
+                        card.querySelector('[data-role="nixie-s1"]').textContent = t.secondStr[0];
+                        card.querySelector('[data-role="nixie-s2"]').textContent = t.secondStr[1];
+                    }
+
+                    // 4. Update Binary BCD Matrix
+                    const bcdGrid = card.querySelector('[data-role="bcd-grid"]');
+                    if (bcdGrid) {
+                        const digits = [
+                            parseInt(t.hourStr[0], 10),
+                            parseInt(t.hourStr[1], 10),
+                            parseInt(t.minuteStr[0], 10),
+                            parseInt(t.minuteStr[1], 10),
+                            parseInt(t.secondStr[0], 10),
+                            parseInt(t.secondStr[1], 10)
+                        ];
+                        digits.forEach((d, colIdx) => {
+                            const col = bcdGrid.querySelector(`[data-bcd-col="${colIdx}"]`);
+                            if (!col) return;
+                            for (let b = 0; b < 4; b++) {
+                                const bitDot = col.querySelector(`[data-bit="${b}"]`);
+                                const isOn = ((d >> b) & 1) === 1;
+                                if (bitDot) {
+                                    bitDot.className = `w-3 h-3 border hairline-border transition-colors ${
+                                        isOn ? 'bg-intlOrange shadow-[0_0_6px_#FF4F00]' : 'bg-neutral-300/30 dark:bg-neutral-800/60'
+                                    }`;
+                                }
+                            }
+                            const valSpan = col.querySelector(`[data-bcd-val="${colIdx}"]`);
+                            if (valSpan) valSpan.textContent = String(d);
+                        });
+                        const dayPctEl = card.querySelector('[data-role="day-pct"]');
+                        if (dayPctEl) {
+                            const dayPct = (((t.hours * 3600 + t.minutes * 60 + t.seconds) / 86400) * 100).toFixed(1);
+                            dayPctEl.textContent = `SOLAR CYCLE: ${dayPct}%`;
+                        }
+                    }
+
+                    // 5. Update Sub-readouts & Footers
+                    const digitalSub = card.querySelector('[data-role="digital-sub"]');
+                    if (digitalSub) digitalSub.textContent = `${t.hourStr}:${t.minuteStr}:${t.secondStr}`;
+
+                    const dateLabel = card.querySelector('[data-role="date-label"]');
+                    if (dateLabel) dateLabel.textContent = t.formattedDate;
+
+                    const diffLabel = card.querySelector('[data-role="diff-label"]');
+                    if (diffLabel) diffLabel.textContent = getOffsetDiffLabel(now, clock.tz, clock.isLocal);
+
+                    const badgeContainer = card.querySelector('[data-role="day-night-badge"]');
+                    if (badgeContainer) {
+                        badgeContainer.innerHTML = getDayNightIndicator(t.hours);
+                    }
+                });
+            }
+
+            // ============================================================================
+            // 6. CALIBER SELECTOR, AUTOCOMPLETE & STATE PERSISTENCE
+            // ============================================================================
+
+            function renderDesignSelector() {
+                designSelectorGroup.innerHTML = DESIGNS.map(d => {
+                    const isActive = d.id === selectedNewDesign;
+                    return `
+                        <button type="button" data-design="${d.id}"
+                            class="p-2.5 border hairline-border text-left font-mono transition-colors flex flex-col justify-between ${
+                                isActive
+                                    ? 'bg-intlOrange text-white border-intlOrange'
+                                    : 'bg-paperDark/30 dark:bg-obsidian hover:border-intlOrange'
+                            }">
+                            <div class="flex items-center justify-between w-full text-[9px] opacity-80">
+                                <span>${d.code}</span>
+                                <span>${d.type}</span>
+                            </div>
+                            <div class="font-sans font-bold text-xs uppercase mt-1.5 truncate">${d.short}</div>
+                        </button>
+                    `;
+                }).join('');
+
+                const activeObj = DESIGNS.find(d => d.id === selectedNewDesign);
+                if (activeObj) {
+                    selectedCaliberLabel.textContent = `${activeObj.code} // ${activeObj.name.toUpperCase()}`;
+                }
+            }
+
+            function renderQuickAddPills() {
+                const featured = ['Stockholm', 'Paris', 'Berlin', 'Singapore', 'Dubai', 'Los Angeles', 'São Paulo', 'Seoul'];
+                quickAddPills.innerHTML = featured.map(cityName => {
+                    const item = WORLD_CITIES.find(c => c.city === cityName);
+                    if (!item) return '';
+                    return `
+                        <button type="button" data-quick-city="${item.city}"
+                            class="font-mono text-[10px] uppercase px-2 py-0.5 border hairline-border bg-paperDark/40 dark:bg-obsidian hover:bg-intlOrange hover:text-white transition-colors">
+                            + ${item.city}
+                        </button>
+                    `;
+                }).join('');
+            }
+
+            function filterCities(query) {
+                const clean = query.trim().toLowerCase();
+                if (!clean) return WORLD_CITIES.slice(0, 12);
+                return WORLD_CITIES.filter(item => {
+                    const haystack = `${item.city} ${item.country} ${item.tz} ${item.coords} ${item.keywords || ''}`.toLowerCase();
+                    return haystack.includes(clean);
+                }).slice(0, 16);
+            }
+
+            function renderAutocomplete(query) {
+                currentFilteredSuggestions = filterCities(query);
+                activeAutocompleteIndex = -1;
+
+                if (currentFilteredSuggestions.length === 0) {
+                    autocompleteDropdown.innerHTML = `
+                        <div class="p-4 font-mono text-xs uppercase text-neutral-500">
+                            // NO TELEMETRY MATCH FOR "${escapeHtml(query)}"
+                        </div>
+                    `;
+                    autocompleteDropdown.classList.remove('hidden');
+                    return;
+                }
+
+                const now = new Date();
+                autocompleteDropdown.innerHTML = currentFilteredSuggestions.map((item, idx) => {
+                    const t = getTimeZoneComponents(now, item.tz);
+                    const diffLabel = getOffsetDiffLabel(now, item.tz, false);
+
+                    return `
+                        <button type="button" data-suggestion-index="${idx}"
+                            class="autocomplete-item w-full text-left px-4 py-2.5 flex items-center justify-between gap-3 hover:bg-intlOrange hover:text-white transition-colors font-mono">
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-sans font-bold text-sm uppercase">${item.city}</span>
+                                    <span class="text-xs opacity-75 uppercase">${item.country}</span>
+                                </div>
+                                <div class="text-[10px] opacity-70">${item.tz} • ${item.coords} • ${diffLabel}</div>
+                            </div>
+                            <div class="text-right shrink-0">
+                                <span class="text-sm font-bold tabular-nums">${t.hourStr}:${t.minuteStr}:${t.secondStr}</span>
+                                <span class="block text-[9px] uppercase tracking-wider">[ + DEPLOY ]</span>
+                            </div>
+                        </button>
+                    `;
+                }).join('');
+
+                autocompleteDropdown.classList.remove('hidden');
+            }
+
+            function addClockFromCityItem(cityItem) {
+                const newClock = {
+                    id: 'watch-' + Date.now() + '-' + Math.random().toString(36).substring(2, 6),
+                    city: cityItem.city,
+                    country: cityItem.country,
+                    tz: cityItem.tz,
+                    coords: cityItem.coords || 'IANA TELEMETRY',
+                    design: selectedNewDesign,
+                    isLocal: false
+                };
+
+                clocks.push(newClock);
+                saveClocks();
+                renderAllClocks();
+
+                citySearchInput.value = '';
+                clearSearchBtn.classList.add('hidden');
+                autocompleteDropdown.classList.add('hidden');
+
+                const caliber = DESIGNS.find(d => d.id === selectedNewDesign);
+                showToast(`DEPLOYED ${cityItem.city.toUpperCase()} [${caliber ? caliber.code : ''}]`);
+            }
+
+            function loadState() {
+                try {
+                    const savedTheme = localStorage.getItem(STORAGE_KEY_THEME);
+                    if (savedTheme === 'light') {
+                        document.documentElement.classList.remove('dark');
+                    } else {
+                        document.documentElement.classList.add('dark');
+                    }
+                } catch (e) {
+                    document.documentElement.classList.add('dark');
+                }
+                updateThemeButtonLabel();
+
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY_CLOCKS);
+                    if (raw) {
+                        const parsed = JSON.parse(raw);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            clocks = parsed;
+                            return;
+                        }
+                    }
+                } catch (e) {}
+
+                clocks = getDefaultClocks();
+                saveClocks();
+            }
+
+            function saveClocks() {
+                try {
+                    localStorage.setItem(STORAGE_KEY_CLOCKS, JSON.stringify(clocks));
+                } catch (e) {}
+            }
+
+            function updateThemeButtonLabel() {
+                const isDark = document.documentElement.classList.contains('dark');
+                themeToggleLabel.textContent = isDark ? 'SURFACE: OBSIDIAN' : 'SURFACE: PAPER';
+            }
+
+            function toggleTheme() {
+                const isDark = document.documentElement.classList.toggle('dark');
+                try {
+                    localStorage.setItem(STORAGE_KEY_THEME, isDark ? 'dark' : 'light');
+                } catch (e) {}
+                updateThemeButtonLabel();
+                showToast(isDark ? 'SURFACE MODE: OBSIDIAN DARK' : 'SURFACE MODE: ARCHIVAL PAPER');
+            }
+
+            function showToast(message) {
+                const toast = document.createElement('div');
+                toast.className = 'pointer-events-auto flex items-center gap-2.5 px-4 py-2.5 border hairline-border bg-obsidian text-paper dark:bg-paper dark:text-obsidian font-mono text-xs uppercase tracking-wider shadow-[4px_4px_0px_#FF4F00] transition-all duration-200';
+                toast.innerHTML = `
+                    <span class="w-2 h-2 bg-intlOrange"></span>
+                    <span>${message}</span>
+                `;
+                toastContainer.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.remove();
+                }, 2600);
+            }
+
+            function escapeHtml(str) {
+                return str.replace(/[&<>"']/g, m => ({
+                    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+                }[m]));
+            }
+
+            // ============================================================================
+            // 7. EVENT LISTENERS
+            // ============================================================================
+
+            function setupEventListeners() {
+                themeToggleBtn.addEventListener('click', toggleTheme);
+
+                const handleReset = () => {
+                    clocks = getDefaultClocks();
+                    saveClocks();
+                    renderAllClocks();
+                    showToast('EXHIBITION COLLECTION RESTORED');
+                };
+                resetDefaultsBtn.addEventListener('click', handleReset);
+                emptyResetBtn.addEventListener('click', handleReset);
+
+                designSelectorGroup.addEventListener('click', (e) => {
+                    const btn = e.target.closest('[data-design]');
+                    if (!btn) return;
+                    selectedNewDesign = btn.getAttribute('data-design');
+                    renderDesignSelector();
+                });
+
+                citySearchInput.addEventListener('input', () => {
+                    const val = citySearchInput.value;
+                    clearSearchBtn.classList.toggle('hidden', val.length === 0);
+                    renderAutocomplete(val);
+                });
+
+                citySearchInput.addEventListener('focus', () => {
+                    renderAutocomplete(citySearchInput.value);
+                });
+
+                citySearchInput.addEventListener('keydown', (e) => {
+                    const items = autocompleteDropdown.querySelectorAll('.autocomplete-item');
+                    if (autocompleteDropdown.classList.contains('hidden') || items.length === 0) return;
+
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        activeAutocompleteIndex = (activeAutocompleteIndex + 1) % items.length;
+                        highlightAutocomplete(items);
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        activeAutocompleteIndex = (activeAutocompleteIndex - 1 + items.length) % items.length;
+                        highlightAutocomplete(items);
+                    } else if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const idx = activeAutocompleteIndex >= 0 ? activeAutocompleteIndex : 0;
+                        if (currentFilteredSuggestions[idx]) {
+                            addClockFromCityItem(currentFilteredSuggestions[idx]);
+                        }
+                    } else if (e.key === 'Escape') {
+                        autocompleteDropdown.classList.add('hidden');
+                    }
+                });
+
+                clearSearchBtn.addEventListener('click', () => {
+                    citySearchInput.value = '';
+                    clearSearchBtn.classList.add('hidden');
+                    autocompleteDropdown.classList.add('hidden');
+                    citySearchInput.focus();
+                });
+
+                autocompleteDropdown.addEventListener('click', (e) => {
+                    const btn = e.target.closest('[data-suggestion-index]');
+                    if (!btn) return;
+                    const idx = parseInt(btn.getAttribute('data-suggestion-index'), 10);
+                    if (currentFilteredSuggestions[idx]) {
+                        addClockFromCityItem(currentFilteredSuggestions[idx]);
+                    }
+                });
+
+                quickAddPills.addEventListener('click', (e) => {
+                    const btn = e.target.closest('[data-quick-city]');
+                    if (!btn) return;
+                    const cityName = btn.getAttribute('data-quick-city');
+                    const cityItem = WORLD_CITIES.find(c => c.city === cityName);
+                    if (cityItem) addClockFromCityItem(cityItem);
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('#citySearchInput') && !e.target.closest('#autocompleteDropdown')) {
+                        autocompleteDropdown.classList.add('hidden');
+                    }
+                });
+
+                clocksGrid.addEventListener('click', (e) => {
+                    const removeBtn = e.target.closest('[data-action="remove-clock"]');
+                    if (removeBtn) {
+                        const id = removeBtn.getAttribute('data-id');
+                        const removed = clocks.find(c => c.id === id);
+                        clocks = clocks.filter(c => c.id !== id);
+                        saveClocks();
+                        renderAllClocks();
+                        if (removed) showToast(`REMOVED ${removed.city.toUpperCase()}`);
+                    }
+                });
+
+                clocksGrid.addEventListener('change', (e) => {
+                    const selectEl = e.target.closest('[data-action="select-design"]');
+                    if (!selectEl) return;
+                    const id = selectEl.getAttribute('data-id');
+                    const newDesign = selectEl.value;
+                    const clock = clocks.find(c => c.id === id);
+                    if (!clock) return;
+
+                    clock.design = newDesign;
+                    saveClocks();
+
+                    const card = clocksGrid.querySelector(`[data-clock-id="${id}"]`);
+                    if (card) {
+                        const now = new Date();
+                        const t = getTimeZoneComponents(now, clock.tz);
+                        const faceContainer = card.querySelector('[data-role="clock-face-container"]');
+                        if (faceContainer) faceContainer.innerHTML = createWatchFaceMarkup(clock, t);
+                    }
+                    const cal = DESIGNS.find(d => d.id === newDesign);
+                    showToast(`${clock.city.toUpperCase()} SET TO ${cal ? cal.code : newDesign}`);
+                });
+            }
+
+            function highlightAutocomplete(items) {
+                items.forEach((el, idx) => {
+                    if (idx === activeAutocompleteIndex) {
+                        el.classList.add('bg-intlOrange', 'text-white');
+                        el.scrollIntoView({ block: 'nearest' });
+                    } else {
+                        el.classList.remove('bg-intlOrange', 'text-white');
+                    }
+                });
+            }
+
+            // ============================================================================
+            // 8. BOOTSTRAP
+            // ============================================================================
+            window.addEventListener('DOMContentLoaded', () => {
+                loadState();
+                renderDesignSelector();
+                renderQuickAddPills();
+                renderAllClocks();
+                setupEventListeners();
+                tickUpdateClocks();
+                setInterval(tickUpdateClocks, 1000);
+            });
+        })();
+    </script>
+</body>
+</html>
