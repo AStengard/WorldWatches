@@ -144,8 +144,8 @@
             <div class="flex items-start sm:items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <!-- Mechanical Emblem -->
-                    <div class="w-12 h-12 border hairline-border bg-obsidian dark:bg-paper text-paper dark:text-obsidian flex items-center justify-center shrink-0 relative">
-                        <svg class="w-7 h-7" viewBox="0 0 32 32" fill="none">
+                    <div class="w-14 h-14 border hairline-border bg-obsidian dark:bg-paper text-paper dark:text-obsidian flex items-center justify-center shrink-0">
+                        <svg class="w-9 h-9" viewBox="0 0 32 32" fill="none">
                             <circle cx="16" cy="16" r="13" stroke="currentColor" stroke-width="1.75"/>
                             <line x1="16" y1="3" x2="16" y2="7" stroke="currentColor" stroke-width="1.75"/>
                             <line x1="16" y1="25" x2="16" y2="29" stroke="currentColor" stroke-width="1.75"/>
@@ -156,7 +156,6 @@
                             <line x1="16" y1="19" x2="16" y2="6" stroke="#FF4F00" stroke-width="1.5"/>
                             <circle cx="16" cy="6" r="2" fill="#FF4F00"/>
                         </svg>
-                        <span class="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-intlOrange"></span>
                     </div>
                     <div>
                         <div class="flex flex-wrap items-baseline gap-x-3">
@@ -201,7 +200,7 @@
                     <span class="text-intlOrange font-bold">MODULE 01</span>
                     <span>// INSTRUMENT CONFIGURATION &amp; TIMEZONE ACQUISITION</span>
                 </div>
-                <span class="text-neutral-500">7 HOROLOGICAL CALIBERS AVAILABLE</span>
+                <span class="text-neutral-500">8 HOROLOGICAL CALIBERS AVAILABLE</span>
             </div>
 
             <div class="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -225,7 +224,7 @@
                 <div class="lg:col-span-5 relative">
                     <label for="citySearchInput" class="font-mono text-xs uppercase tracking-wider font-semibold flex items-center gap-2 mb-2.5">
                         <span class="px-1.5 py-0.5 bg-intlOrange text-white text-[10px]">02</span>
-                        <span>Search World City, Country or IANA Zone</span>
+                        <span>Search World City or Country</span>
                     </label>
 
                     <div class="relative flex items-center">
@@ -265,7 +264,7 @@
             <p class="font-mono text-xs uppercase tracking-widest text-intlOrange mb-2">// ZERO INSTRUMENTS DEPLOYED</p>
             <h2 class="font-serif italic text-4xl mb-3">Horological Bench Empty</h2>
             <p class="font-mono text-xs text-neutral-500 max-w-md mx-auto mb-6">
-                Use the telemetry search above to deploy world watches in any of the 7 analog or digital calibers, or restore the factory exhibition collection.
+                Use the telemetry search above to deploy world watches in any of the 8 analog or digital calibers, or restore the factory exhibition collection.
             </p>
             <button id="emptyResetBtn" type="button" class="font-mono text-xs uppercase tracking-widest px-6 py-3 bg-intlOrange text-white hover:opacity-90 transition-opacity">
                 [ Restore Exhibition Collection ]
@@ -285,12 +284,7 @@
                     <span class="w-2 h-2 bg-intlOrange"></span>
                     <span class="font-bold tracking-wider uppercase">WORLD WATCHES — HOROLOGICAL TELEMETRY</span>
                 </div>
-                <p class="text-[11px] text-neutral-500">
-                    100% STANDALONE CLIENT-SIDE ENGINE // ZERO EXTERNAL API DEPENDENCIES // IANA TIMEZONE DATABASE
-                </p>
-            </div>
-            <div class="border hairline-border px-4 py-2 bg-paper dark:bg-obsidian text-right">
-                <span class="block text-[10px] text-neutral-500 uppercase tracking-widest">DESIGNED &amp; ENGINEERED</span>
+            <div class="border hairline-border px-4 py-2 bg-paper dark:bg-obsidian text-right flex items-center h-full">
                 <span class="font-bold tracking-widest text-intlOrange uppercase">BY ALFRED STENGARD</span>
             </div>
         </div>
@@ -302,7 +296,7 @@
             'use strict';
 
             // ============================================================================
-            // 1. 7 HOROLOGICAL WATCH DESIGNS (3 ANALOG, 4 DIGITAL)
+            // 1. 8 HOROLOGICAL WATCH DESIGNS (3 ANALOG, 5 DIGITAL)
             // ============================================================================
             const DESIGNS = [
                 { id: 'swiss-railway', code: 'CAL.01', short: 'Swiss Rail', name: 'Swiss Railway (Mondaine)', type: 'ANALOG' },
@@ -311,7 +305,8 @@
                 { id: 'split-flap',    code: 'CAL.04', short: 'Flip Clock', name: 'Split-Flap Mechanical', type: 'DIGITAL' },
                 { id: 'casio-lcd',     code: 'CAL.05', short: 'Casio F-91W', name: 'Casio Vintage Quartz LCD', type: 'DIGITAL' },
                 { id: 'nixie-tube',    code: 'CAL.06', short: 'Nixie Tube', name: 'Cathode Glow Nixie', type: 'DIGITAL' },
-                { id: 'binary-matrix', code: 'CAL.07', short: 'BCD Matrix', name: 'Binary Horological Matrix', type: 'DIGITAL' }
+                { id: 'binary-matrix', code: 'CAL.07', short: 'BCD Matrix', name: 'Binary Horological Matrix', type: 'DIGITAL' },
+                { id: 'simple-digital',code: 'CAL.08', short: 'Essential', name: 'Essential Digital', type: 'DIGITAL' }
             ];
 
             // ============================================================================
@@ -418,8 +413,8 @@
             ];
 
             // New storage keys so old states don't conflict
-            const STORAGE_KEY_CLOCKS = 'world_watches_alfred_stengard_v2';
-            const STORAGE_KEY_THEME = 'world_watches_theme_v2';
+            const STORAGE_KEY_CLOCKS = 'world_watches_alfred_stengard_v3';
+            const STORAGE_KEY_THEME = 'world_watches_theme_v3';
             const USER_LOCAL_TZ = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Stockholm';
 
             let clocks = [];
@@ -459,60 +454,15 @@
             }
 
             function getDefaultClocks() {
-                const localInfo = resolveLocalCityInfo(USER_LOCAL_TZ);
+                const stockholm = WORLD_CITIES.find(c => c.city === 'Stockholm');
                 return [
                     {
-                        id: 'watch-local',
-                        city: localInfo.city,
-                        country: localInfo.country,
-                        tz: USER_LOCAL_TZ,
-                        coords: localInfo.coords,
-                        design: 'swiss-railway',
-                        isLocal: true
-                    },
-                    {
-                        id: 'watch-london',
-                        city: 'London',
-                        country: 'United Kingdom',
-                        tz: 'Europe/London',
-                        coords: '51.51°N, 00.13°W',
-                        design: 'split-flap',
-                        isLocal: false
-                    },
-                    {
-                        id: 'watch-newyork',
-                        city: 'New York',
-                        country: 'United States',
-                        tz: 'America/New_York',
-                        coords: '40.71°N, 74.01°W',
-                        design: 'chrono-diver',
-                        isLocal: false
-                    },
-                    {
-                        id: 'watch-tokyo',
-                        city: 'Tokyo',
-                        country: 'Japan',
-                        tz: 'Asia/Tokyo',
-                        coords: '35.68°N, 139.77°E',
-                        design: 'casio-lcd',
-                        isLocal: false
-                    },
-                    {
-                        id: 'watch-geneva',
-                        city: 'Geneva',
-                        country: 'Switzerland',
-                        tz: 'Europe/Zurich',
-                        coords: '46.20°N, 06.14°E',
+                        id: 'watch-stockholm',
+                        city: stockholm.city,
+                        country: stockholm.country,
+                        tz: stockholm.tz,
+                        coords: stockholm.coords,
                         design: 'bauhaus-bill',
-                        isLocal: false
-                    },
-                    {
-                        id: 'watch-sydney',
-                        city: 'Sydney',
-                        country: 'Australia',
-                        tz: 'Australia/Sydney',
-                        coords: '33.87°S, 151.21°E',
-                        design: 'nixie-tube',
                         isLocal: false
                     }
                 ];
@@ -1013,6 +963,32 @@
                             </div>
                         `;
                     }
+
+                    // --------------------------------------------------------------------
+                    // 8. ESSENTIAL DIGITAL
+                    // --------------------------------------------------------------------
+                    case 'simple-digital':
+                        return `
+                            <div class="flex flex-col items-center justify-center py-6 w-full">
+                                <div class="w-full max-w-[260px] border hairline-border bg-paperDark/20 dark:bg-black/20 p-5 flex flex-col items-center shadow-[4px_4px_0px_#1A1A18] dark:shadow-[4px_4px_0px_#2E2E2A]">
+                                    <div class="flex items-baseline justify-center font-sans font-bold text-6xl sm:text-7xl tracking-tighter tabular-nums text-obsidian dark:text-paper leading-none mb-1">
+                                        <span data-role="hour">${hourStr}</span>
+                                        <span class="text-intlOrange opacity-80 pb-2 blink-sep">:</span>
+                                        <span data-role="minute">${minuteStr}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between w-full mt-4 pt-3 border-t hairline-border">
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-mono text-[10px] text-neutral-500">SEC</span>
+                                            <span data-role="second" class="font-mono text-xl font-bold text-obsidian dark:text-paper tabular-nums">${secondStr}</span>
+                                        </div>
+                                        <span data-role="ampm" class="font-mono text-[10px] bg-intlOrange text-white px-2 py-0.5 font-bold">${ampm}</span>
+                                    </div>
+                                </div>
+                                <div class="mt-4 font-mono text-[10px] tracking-widest uppercase text-neutral-500">
+                                    ESSENTIAL DIGITAL READOUT
+                                </div>
+                            </div>
+                        `;
                 }
             }
 
@@ -1336,13 +1312,13 @@
             function loadState() {
                 try {
                     const savedTheme = localStorage.getItem(STORAGE_KEY_THEME);
-                    if (savedTheme === 'light') {
-                        document.documentElement.classList.remove('dark');
-                    } else {
+                    if (savedTheme === 'dark') {
                         document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
                     }
                 } catch (e) {
-                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('dark');
                 }
                 updateThemeButtonLabel();
 
